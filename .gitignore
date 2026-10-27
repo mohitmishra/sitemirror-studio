@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.venv-pack/
+node_modules/
+build/
+dist/
+data/*
+!data/.gitkeep
+exports/*
+!exports/.gitkeep
+.DS_Store
+*.log

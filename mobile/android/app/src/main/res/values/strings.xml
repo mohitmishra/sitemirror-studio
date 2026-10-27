@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SiteMirror Studio</string>
+    <string name="title_activity_main">SiteMirror Studio</string>
+    <string name="package_name">studio.sitemirror.app</string>
+    <string name="custom_url_scheme">studio.sitemirror.app</string>
+</resources>

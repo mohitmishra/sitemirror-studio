@@ -1,0 +1,9 @@
+services:
+  sitemirror:
+    build: .
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./data:/app/data
+      - ./exports:/app/exports
+    shm_size: 1gb

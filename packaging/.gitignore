@@ -1,0 +1,9 @@
+# Stable packaging outputs — never commit built binaries.
+dist/
+build/
+*.dmg
+*.sha256.txt
+mobile/android/
+mobile/ios/
+mobile/node_modules/
+web/sitemirror-config.json

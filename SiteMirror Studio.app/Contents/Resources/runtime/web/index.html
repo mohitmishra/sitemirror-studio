@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#111827" />
+  <title>SiteMirror Studio</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/app-icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/">
+        <span class="brand-mark">S</span>
+        <span><strong>SiteMirror</strong><small>Studio</small></span>
+      </a>
+      <nav class="nav">
+        <button class="nav-item active" data-view="overview"><span>◫</span>Overview</button>
+        <button class="nav-item" data-view="discovery"><span>⌁</span>Discovery <b id="nav-discovery">—</b></button>
+        <button class="nav-item" data-view="pages"><span>▤</span>Pages <b id="nav-pages">—</b></button>
+        <button class="nav-item" data-view="assets"><span>◇</span>Assets <b id="nav-assets">—</b></button>
+        <button class="nav-item" data-view="issues"><span>△</span>Issues <b id="nav-issues">—</b></button>
+        <button class="nav-item" data-view="compare"><span>⇄</span>Compare</button>
+        <button class="nav-item" data-view="exports"><span>↓</span>Exports</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="browser-status"><i id="browser-dot"></i><span id="browser-label">Crawler ready</span></div>
+        <button id="new-site-side" class="ghost full">＋ New website</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobile-menu">☰</button>
+        <div class="command-wrap">
+          <span class="search-icon">⌕</span>
+          <input id="command" placeholder="Search website, URL, page or action…" autocomplete="off" />
+          <kbd>⌘ K</kbd>
+        </div>
+        <button class="top-action hidden" id="open-browser-btn" title="Open this workspace in your normal browser">Open in browser ↗</button>
+        <button class="icon-btn" id="refresh-project" title="Refresh">↻</button>
+        <div class="avatar">SM</div>
+      </header>
+
+      <section id="landing" class="landing">
+        <div class="landing-inner">
+          <div class="eyebrow">Website workspace</div>
+          <h1>What website are you working on?</h1>
+          <p>Paste a URL. SiteMirror discovers its pages, visual assets, SEO, dates, domain data, issues and a browsable local mirror.</p>
+          <form id="url-form" class="url-box">
+            <span class="globe">◎</span>
+            <input id="url-input" type="text" placeholder="example.com or https://www.example.com/" spellcheck="false" />
+            <button type="submit">Inspect website <span>→</span></button>
+          </form>
+          <div class="landing-note"><span>✦</span> Browser stays closed for normal scans. If a site requires security verification, SiteMirror opens one isolated crawler browser. Verify once; SiteMirror then minimizes that same browser and reuses the same session for the entire crawl.</div>
+
+          <div class="recent-head">
+            <div><h2>Recent websites</h2><small id="recent-count" class="recent-count">0 projects</small></div>
+            <div class="recent-head-actions"><button class="link-btn" id="refresh-recents">Refresh</button><button class="link-btn" id="toggle-all-recents">View all</button></div>
+          </div>
+          <div class="recent-tools">
+            <div class="recent-search"><span>⌕</span><input id="recent-filter" placeholder="Search projects or domains…" /></div>
+            <select id="recent-status-filter">
+              <option value="all">All status</option>
+              <option value="active">In progress</option>
+              <option value="complete">Complete</option>
+              <option value="attention">Needs attention</option>
+              <option value="data_removed">Data removed</option>
+            </select>
+          </div>
+          <div class="recent-grid" id="recent-grid">
+            <div class="empty-card">No projects yet. Paste a URL above to create your first Website object.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="workspace" class="workspace hidden">
+        <div class="workspace-head">
+          <div class="website-identity">
+            <div class="site-logo" id="site-logo-wrap"><img id="site-logo" alt="" /><span id="site-logo-fallback">W</span></div>
+            <div>
+              <div class="crumb">Website</div>
+              <h1 id="site-title">Website</h1>
+              <a id="site-domain" href="#" target="_blank" rel="noopener">—</a>
+            </div>
+          </div>
+          <div class="head-actions">
+            <button class="secondary" id="show-files-btn">Show in Finder</button>
+            <button class="secondary" id="preview-btn">Preview in browser</button>
+            <button class="primary" id="export-btn">Export website</button>
+          </div>
+        </div>
+
+        <div id="crawl-strip" class="crawl-strip hidden">
+          <div class="crawl-pulse"></div>
+          <div class="crawl-copy"><strong id="crawl-title">Discovering website…</strong><span id="crawl-current">Connecting</span></div>
+          <div class="progress-track"><div id="progress-bar"></div></div>
+          <strong id="progress-label">0%</strong>
+          <button class="crawl-stop" id="stop-crawl" type="button"><span aria-hidden="true">■</span> Stop crawl</button>
+        </div>
+
+        <div id="verification-panel" class="verification-panel hidden">
+          <div class="verification-icon">◉</div>
+          <div class="verification-copy">
+            <span class="object-kicker">One-time verification</span>
+            <h3>Complete the website check in the SiteMirror crawler browser</h3>
+            <p>SiteMirror has opened a separate, isolated browser profile for this website. Complete the verification <strong>once in that window</strong>. Do not switch to another Chrome profile or tab. As soon as the real website loads, SiteMirror keeps that exact session, minimizes the crawler browser, and uses it for every page in this crawl.</p>
+            <p class="verification-session-status">No extension is required. Your normal Chrome profile is not used. SiteMirror will not attach crawler control until you confirm below.</p>
+            <div class="verification-actions">
+              <button class="primary" id="browser-ready-btn" type="button">Continue — the real website is visible</button>
+              <button class="secondary" id="verification-stop-btn" type="button">Stop crawl</button>
+            </div>
+            <p class="verification-warning"><strong>Safety:</strong> never paste Terminal, PowerShell, Run-dialog or shell commands shown by a verification webpage.</p>
+          </div>
+        </div>
+
+        <div id="view-overview" class="view-panel">
+          <div class="object-grid">
+            <article class="object-card featured">
+              <div class="object-label">SEO health</div>
+              <div class="health-row"><strong id="health-score">—</strong><span>/ 100</span></div>
+              <div class="health-track"><div id="health-bar"></div></div>
+              <p id="health-copy">Scan the website to calculate technical and on-page SEO checks.</p>
+            </article>
+            <article class="object-card"><div class="object-label">Pages</div><strong id="stat-pages">—</strong><p>Discovered website objects</p></article>
+            <article class="object-card"><div class="object-label">Assets</div><strong id="stat-assets">—</strong><p>Images, CSS, JS, fonts & files</p></article>
+            <article class="object-card"><div class="object-label">Issues</div><strong id="stat-issues">—</strong><p>SEO + crawl items needing attention</p></article>
+          </div>
+
+          <div class="audit-strip">
+            <div class="audit-stat"><span>Mirror fidelity <i class="info-tip" data-tip="Share of detected visual/front-end resources successfully localized into the downloaded mirror. Server-side actions and third-party services are tracked separately.">i</i></span><strong id="mirror-fidelity">—</strong></div>
+            <div class="audit-stat"><span>SEO failures</span><strong id="seo-fail">—</strong></div>
+            <div class="audit-stat"><span>SEO warnings</span><strong id="seo-warn">—</strong></div>
+            <div class="audit-stat"><span>Clean pages</span><strong id="seo-pass">—</strong></div>
+            <div class="audit-stat"><span>Localized resources</span><strong id="localized-assets">—</strong></div>
+          </div>
+
+          <div class="two-col">
+            <article class="panel domain-panel">
+              <div class="panel-head"><div><span class="object-kicker">Website object</span><h2>Identity & timeline</h2></div><span class="pill" id="engine-pill">Crawler</span></div>
+              <div class="identity-list">
+                <div><span>Domain age <i class="info-tip" data-tip="Calculated from the registry registration event returned by RDAP when the TLD publishes it. This is domain registration age, not website-content age.">i</i></span><strong id="domain-age">Not available</strong></div>
+                <div><span>Registered <i class="info-tip" data-tip="Registry creation/registration date from RDAP when available.">i</i></span><strong id="registered-at">Not available</strong></div>
+                <div><span>Expires</span><strong id="expires-at">Not available</strong></div>
+                <div><span>Registrar</span><strong id="registrar">Not available</strong></div>
+                <div><span>Latest modified <i class="info-tip" data-tip="Newest modification signal found across JSON-LD, article metadata, HTTP Last-Modified or sitemap lastmod. Source is preserved per page.">i</i></span><strong id="last-modified">Not found</strong></div>
+                <div><span>Latest published <i class="info-tip" data-tip="Newest page publication signal found in article metadata, JSON-LD, semantic time elements or RSS/Atom.">i</i></span><strong id="last-published">Not found</strong></div>
+                <div class="contact-field"><span>Email addresses <i class="info-tip" data-tip="Collected from mailto links, structured data and visible page text. Hover a contact to see how many crawled pages contained it.">i</i></span><div id="contact-emails" class="contact-values"><span class="contact-empty">Not found</span></div></div>
+                <div class="contact-field"><span>Phone numbers <i class="info-tip" data-tip="Collected from tel links, structured data and visible page text. SiteMirror de-duplicates the same number across pages.">i</i></span><div id="contact-phones" class="contact-values"><span class="contact-empty">Not found</span></div></div>
+              </div>
+              <div class="provenance">Dates are evidence-based. RDAP supplies domain registration data; page publish/modified dates retain their individual source. Sitemap lastmod is never treated as a URL creation date.</div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head"><div><span class="object-kicker">Issue inbox</span><h2>Needs attention</h2></div><button class="link-btn" data-view-jump="issues">View all</button></div>
+              <div id="issue-summary" class="issue-summary"><div class="empty-mini">No issue data yet.</div></div>
+            </article>
+          </div>
+
+          <article class="panel">
+            <div class="panel-head"><div><span class="object-kicker">Page objects</span><h2>Website pages</h2></div><button class="link-btn" data-view-jump="pages">View all pages</button></div>
+            <div id="overview-pages" class="object-list"><div class="empty-mini">Pages will appear while the scan runs.</div></div>
+          </article>
+        </div>
+
+        <div id="view-discovery" class="view-panel hidden">
+          <div class="object-grid discovery-cards">
+            <article class="object-card"><div class="object-label">robots.txt</div><strong id="disc-robots">—</strong><p id="disc-robots-copy">Checking site root</p></article>
+            <article class="object-card"><div class="object-label">Valid sitemaps</div><strong id="disc-sitemaps">—</strong><p>XML, text and nested indexes</p></article>
+            <article class="object-card"><div class="object-label">URLs discovered</div><strong id="disc-urls">—</strong><p>Before page crawling begins</p></article>
+            <article class="object-card"><div class="object-label">Browser fallback</div><strong id="disc-browser">—</strong><p id="disc-browser-copy">Used only when required</p></article>
+          </div>
+
+          <div class="two-col">
+            <article class="panel">
+              <div class="panel-head"><div><span class="object-kicker">Discovery object</span><h2>robots.txt audit</h2></div><span class="pill" id="robots-status-pill">Checking</span></div>
+              <div class="identity-list">
+                <div><span>Location</span><strong id="robots-url">/robots.txt</strong></div>
+                <div><span>HTTP status</span><strong id="robots-http">—</strong></div>
+                <div><span>Allow rules</span><strong id="robots-allow">—</strong></div>
+                <div><span>Disallow rules</span><strong id="robots-disallow">—</strong></div>
+                <div><span>Declared sitemaps</span><strong id="robots-sitemap-count">—</strong></div>
+                <div><span>Assessment</span><strong id="robots-assessment">—</strong></div>
+              </div>
+              <div class="provenance" id="robots-notes">robots.txt is checked at the site root. Missing robots.txt is not automatically an error.</div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head"><div><span class="object-kicker">Standards audit</span><h2>Correct / needs attention</h2></div></div>
+              <div id="standards-list" class="issue-summary"><div class="empty-mini">Discovery results will appear here.</div></div>
+            </article>
+          </div>
+
+          <article class="panel grid-panel">
+            <div class="panel-head grid-toolbar"><div><span class="object-kicker">Sitemap objects</span><h2>Sitemaps & indexes</h2></div><div class="small-muted">Declared, discovered and common locations are inspected recursively.</div></div>
+            <div class="data-grid-wrap"><table class="data-grid discovery-grid"><thead><tr><th>Sitemap</th><th>Source</th><th>Type</th><th>HTTP</th><th>URLs</th><th>Child maps</th><th>Lastmod</th><th>Validation</th></tr></thead><tbody id="sitemaps-body"></tbody></table></div>
+          </article>
+
+          <article class="panel grid-panel">
+            <div class="panel-head grid-toolbar"><div><span class="object-kicker">Alternate discovery</span><h2>HTML sitemaps & feeds</h2></div></div>
+            <div class="data-grid-wrap"><table class="data-grid"><thead><tr><th>Resource</th><th>Kind</th><th>Source</th><th>HTTP</th><th>URLs found</th><th>Assessment</th></tr></thead><tbody id="alternate-discovery-body"></tbody></table></div>
+          </article>
+        </div>
+
+        <div id="view-pages" class="view-panel hidden">
+          <div class="panel grid-panel">
+            <div class="panel-head grid-toolbar">
+              <div><span class="object-kicker">Page objects</span><h2>Pages</h2></div>
+              <div class="filters"><input id="page-filter" placeholder="Filter pages…"/><select id="page-status-filter"><option value="all">All status</option><option value="issues">Has issues</option><option value="good">No issues</option></select></div>
+            </div>
+            <div class="data-grid-wrap"><table class="data-grid page-seo-grid"><thead><tr><th>Page</th><th>HTTP</th><th>URL age <i class="info-tip" data-tip="Uses page publication evidence when available. Historical first-seen can be checked from the Page object; sitemap lastmod is not used as creation age.">i</i></th><th>Title SEO</th><th>Description SEO</th><th>Published</th><th>Modified</th><th>Issues</th><th></th></tr></thead><tbody id="pages-body"></tbody></table></div>
+          </div>
+        </div>
+
+        <div id="view-assets" class="view-panel hidden">
+          <div class="panel grid-panel">
+            <div class="panel-head grid-toolbar"><div><span class="object-kicker">Asset objects</span><h2>Assets</h2></div><input id="asset-filter" placeholder="Filter assets…" /></div>
+            <div class="data-grid-wrap"><table class="data-grid"><thead><tr><th>Asset</th><th>Type</th><th>Size</th><th>Local path</th></tr></thead><tbody id="assets-body"></tbody></table></div>
+          </div>
+        </div>
+
+        <div id="view-issues" class="view-panel hidden">
+          <div class="panel">
+            <div class="panel-head"><div><span class="object-kicker">Issue objects</span><h2>Needs attention</h2></div><div class="severity-legend"><span class="sev fail">Fail</span><span class="sev warning">Warning</span><span class="sev info">Info</span></div></div>
+            <div id="issues-list" class="issues-list"></div>
+          </div>
+        </div>
+
+        <div id="view-compare" class="view-panel hidden">
+          <div class="panel compare-panel">
+            <span class="object-kicker">Target object</span><h2>Compare with another website</h2><p>Choose another completed SiteMirror project. Pages are matched by URL path and checked for title, H1 and meta-description changes.</p>
+            <div class="compare-controls"><select id="compare-project"></select><button class="primary" id="compare-run">Compare projects</button></div>
+            <div id="compare-result"></div>
+          </div>
+        </div>
+
+        <div id="view-exports" class="view-panel hidden">
+          <div class="panel">
+            <span class="object-kicker">Export object</span><h2>Take the website with you</h2>
+            <div class="export-grid">
+              <button class="export-card" id="save-zip"><span class="export-icon">⬡</span><strong>Save website package…</strong><small>Choose where to save the complete ZIP using the macOS/Windows save dialog.</small><b>Save ZIP →</b></button>
+              <button class="export-card" id="download-zip"><span class="export-icon">↓</span><strong>Browser download</strong><small>Download the same package through the normal browser download flow.</small><b>Download ZIP →</b></button>
+              <button class="export-card" id="preview-browser"><span class="export-icon">◫</span><strong>Preview mirror</strong><small>Serve the local mirror over HTTP and open it in your default browser.</small><b>Open preview ↗</b></button>
+            </div>
+          </div>
+          <div class="panel storage-panel">
+            <div class="panel-head"><div><span class="object-kicker">Local files</span><h2>Project storage</h2></div><span class="pill" id="file-manager-label">Finder</span></div>
+            <p class="storage-copy">SiteMirror keeps project data outside the app so upgrades do not remove your crawls. You can open any location directly.</p>
+            <div class="path-row"><span>Application data</span><code id="storage-data-path">Loading…</code><button class="secondary small-action" id="reveal-data">Show</button></div>
+            <div class="path-row"><span>Current project</span><code id="storage-project-path">Open a project</code><button class="secondary small-action" id="reveal-project">Show</button></div>
+            <div class="path-row"><span>Local mirror</span><code id="storage-mirror-path">—</code><button class="secondary small-action" id="reveal-mirror">Show</button></div>
+            <div class="path-row"><span>Exports</span><code id="storage-exports-path">Loading…</code><button class="secondary small-action" id="reveal-exports">Show</button></div>
+            <div class="storage-actions">
+              <button class="secondary" id="open-project-browser">Open project in browser ↗</button>
+              <button class="secondary" id="reveal-zip">Create ZIP & show in file manager</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="page-dialog" class="page-dialog"><div id="page-dialog-content"></div><button class="dialog-close" id="dialog-close">×</button></dialog>
+  <dialog id="project-actions-dialog" class="project-actions-dialog">
+    <button class="dialog-close" id="project-actions-close">×</button>
+    <div class="project-actions-content">
+      <span class="object-kicker">Project history</span>
+      <h2 id="project-actions-title">Website project</h2>
+      <p id="project-actions-url">—</p>
+      <div class="project-action-summary" id="project-action-summary"></div>
+      <div class="project-action-list">
+        <button class="project-action-row project-stop-row hidden" id="project-action-stop" type="button">
+          <span class="project-action-icon">■</span><span><strong>Stop crawl</strong><small>Stop this crawl now and keep everything already downloaded.</small></span><b>Keep data</b>
+        </button>
+        <button class="project-action-row" data-delete-mode="history">
+          <span class="project-action-icon">◷</span><span><strong>Remove from history</strong><small>Hide this project from SiteMirror. Downloaded files stay on disk.</small></span><b>Keep data</b>
+        </button>
+        <button class="project-action-row danger-soft" data-delete-mode="data">
+          <span class="project-action-icon">⌫</span><span><strong>Delete downloaded data</strong><small>Remove mirror, assets, reports and generated ZIP. Keep the project entry so you can rescan it later.</small></span><b>Keep history</b>
+        </button>
+        <button class="project-action-row danger" data-delete-mode="all">
+          <span class="project-action-icon">×</span><span><strong>Delete project & data</strong><small>Permanently remove the SiteMirror project and its downloaded files.</small></span><b>Permanent</b>
+        </button>
+      </div>
+      <div class="project-action-warning hidden" id="project-action-warning">Stop this crawl before deleting its history or data.</div>
+    </div>
+  </dialog>
+  <div id="toast" class="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

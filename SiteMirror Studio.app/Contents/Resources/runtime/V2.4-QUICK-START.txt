@@ -1,0 +1,11 @@
+SiteMirror Studio v2.4 — CDN/WAF Browser Fallback
+
+Fixes static CloudFront/Akamai/Fastly-style 401/403/429/503 failures.
+
+Direct HTTP remains first. If a CDN/WAF denies it, SiteMirror now launches one dedicated
+real browser directly at the target URL before attaching automation. If the real page loads,
+that exact browser profile/context is reused for the entire crawl.
+
+Static CDN denial pages are no longer mistaken for interactive human-verification pages.
+If the dedicated browser itself is still denied, SiteMirror reports that accurately instead
+of waiting on a verification loop that cannot be solved.

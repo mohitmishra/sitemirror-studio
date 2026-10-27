@@ -1,0 +1,18 @@
+#!/bin/bash
+set -u
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$HERE/../Resources/runtime"
+PYTHON="$(command -v python3 || true)"
+LOGDIR="$HOME/Library/Logs/SiteMirror Studio"
+mkdir -p "$LOGDIR"
+LOG="$LOGDIR/native.log"
+if [ -z "$PYTHON" ]; then
+  /usr/bin/osascript -e 'display dialog "Python 3 was not found. Run INSTALL-MAC-APP.command after installing Python 3." with title "SiteMirror Studio" buttons {"OK"} default button "OK"'
+  exit 1
+fi
+if ! "$PYTHON" -c 'import webview,fastapi,uvicorn' >/dev/null 2>&1; then
+  /usr/bin/osascript -e 'display dialog "SiteMirror native runtime is not installed yet. Run INSTALL-MAC-APP.command once." with title "SiteMirror Studio" buttons {"OK"} default button "OK"'
+  exit 2
+fi
+cd "$ROOT" || exit 3
+exec "$PYTHON" "$ROOT/native_app.py" >>"$LOG" 2>&1

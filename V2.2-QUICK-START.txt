@@ -1,0 +1,34 @@
+SiteMirror Studio v2.2 — Stop + Stable Cards
+
+What this fixes
+---------------
+- Stop Crawl is now a real cancellation signal, not just a status label.
+- A stop request cannot be overwritten by later crawler status updates.
+- Dedicated verification browser processes are terminated immediately on Stop.
+- Direct HTTP/discovery requests are interruptible, so Stop does not wait for a long network timeout.
+- Orphaned/stale crawls from an older SiteMirror process can be stopped immediately and then deleted.
+- Recent-project cards update in place. Favicons are not recreated every polling cycle, eliminating the visible blinking.
+- Progress circles are stable (no spinning animation) and update numerically.
+- Running cards have their own Stop button.
+- The workspace Stop button is now clearly labelled “Stop crawl”.
+- The project menu also has Stop crawl while a job is active.
+
+Install on Mac
+--------------
+1. Quit the existing SiteMirror Studio app.
+2. Extract this package.
+3. Double-click INSTALL-MAC-APP.command.
+4. Open SiteMirror Studio from ~/Applications.
+
+Your existing projects remain in:
+~/Library/Application Support/SiteMirror Studio/
+
+Stopping keeps all pages/assets already downloaded. Once the card says Stopped, its remove/delete options become available.
+
+Existing projects stuck on “Stopping”
+------------------------------------
+v2.2 automatically converts an unfinished stop request from a previous SiteMirror session to Stopped on launch, preserving its downloaded data. You can then remove history, delete downloaded data, or delete the whole project.
+
+Existing projects stuck on “Stopping”
+------------------------------------
+v2.2 automatically converts an unfinished stop request from a previous SiteMirror session to Stopped on launch, preserving its downloaded data. You can then remove history, delete downloaded data, or delete the whole project.

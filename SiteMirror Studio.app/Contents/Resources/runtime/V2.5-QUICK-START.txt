@@ -1,0 +1,22 @@
+SiteMirror Studio v2.5 — Original-Script Browser Handoff
+
+This release changes the protected-site flow to match the original Python/BAT scraper that worked reliably:
+
+1. SiteMirror probes robots.txt + homepage directly.
+2. If a CDN/WAF or security check blocks direct access, direct endpoint guessing stops immediately.
+3. SiteMirror launches ONE dedicated real Chrome/Edge/Brave window at the requested URL.
+4. SiteMirror DOES NOT attach crawler automation yet.
+5. Wait until the real website is visible in that dedicated browser. Refresh/complete the website's own check if needed.
+6. Back in SiteMirror click: “Continue — the real website is visible”.
+7. Only then does SiteMirror attach to that SAME browser process/profile/tab.
+8. The browser is minimized and the exact same session is reused for the full crawl.
+
+No extension. No cross-profile cookie transfer. No per-page verification.
+
+Additional fixes:
+- CloudFront/Akamai/Fastly denial short-circuits direct discovery instead of triggering dozens of blocked probes.
+- SiteMirror selects the actual target website tab, not blindly the first CDP tab/about:blank.
+- Browser-side same-origin fetch() is used to recover robots/sitemaps after access succeeds.
+- Failed project cards display the real failure reason.
+
+If the real website never becomes visible in the dedicated browser and your ordinary browser also gets the same 403, the denial is coming from the site/CDN/network rather than SiteMirror.
