@@ -1,0 +1,21 @@
+{
+  "name": "sitemirror-mobile-shell",
+  "private": true,
+  "version": "2.6.0-stable",
+  "scripts": {
+    "cap:add:android": "npx cap add android",
+    "cap:add:ios": "npx cap add ios",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/core": "latest",
+    "@capacitor/ios": "latest"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "latest",
+    "typescript": "^7.0.2"
+  }
+}

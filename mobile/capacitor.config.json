@@ -1,0 +1,8 @@
+{
+  "appId": "studio.sitemirror.app",
+  "appName": "SiteMirror Studio",
+  "webDir": "../web",
+  "server": {
+    "androidScheme": "http"
+  }
+}

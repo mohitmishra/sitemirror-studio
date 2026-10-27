@@ -1,0 +1,2 @@
+pywebview>=5.4
+pyobjc>=10.3; platform_system == "Darwin"
