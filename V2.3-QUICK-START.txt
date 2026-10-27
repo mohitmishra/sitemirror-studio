@@ -1,0 +1,19 @@
+SiteMirror Studio v2.3
+======================
+
+WHAT'S NEW
+----------
+- Website card status appears only once.
+- Longer titles are much easier to read.
+- Email addresses and phone numbers are collected across crawled pages.
+- Contact values include source-page provenance.
+- contacts.json and contacts.csv are included in project exports.
+- You can type example.com without http:// or https://; SiteMirror adds https:// automatically.
+
+INSTALL ON MAC
+--------------
+1. Quit the older SiteMirror Studio app.
+2. Run INSTALL-MAC-APP.command from this folder.
+3. Open ~/Applications/SiteMirror Studio.app.
+
+Existing projects are preserved in ~/Library/Application Support/SiteMirror Studio/data/.

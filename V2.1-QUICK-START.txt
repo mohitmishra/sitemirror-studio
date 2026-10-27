@@ -1,0 +1,36 @@
+SiteMirror Studio v2.1 — Project History & Live Cards
+=====================================================
+
+UPGRADE
+-------
+1. Close the older SiteMirror Studio app.
+2. Run INSTALL-MAC-APP.command once from this v2.1 folder.
+3. Open ~/Applications/SiteMirror Studio.app normally.
+
+Your existing projects remain in:
+~/Library/Application Support/SiteMirror Studio/data/
+
+v2.1 automatically imports existing project folders into the new history index.
+
+RECENT WEBSITES
+---------------
+- The home screen initially shows the newest 6 cards.
+- Click View all to show every project.
+- Search by domain/title/URL.
+- Filter by In progress, Complete, Needs attention, or Data removed.
+- Active crawls show a live circular progress indicator and animated progress line.
+
+PROJECT MENU
+------------
+Click ••• on any project card.
+
+Remove from history
+  Removes the SiteMirror history entry only. Downloaded project files remain on disk.
+
+Delete downloaded data
+  Deletes mirror/assets/reports/generated ZIP but keeps the history entry and crawl counts.
+
+Delete project & data
+  Permanently deletes both history and downloaded SiteMirror data.
+
+SiteMirror blocks all delete actions while that project is actively crawling. Stop the crawl first.

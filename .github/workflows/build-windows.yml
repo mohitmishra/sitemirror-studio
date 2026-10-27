@@ -1,0 +1,43 @@
+name: build-windows-exe
+# Builds the Windows .exe on a hosted runner because PyInstaller cannot
+# cross-compile from macOS. Trigger manually or by pushing a v* tag.
+on:
+  workflow_dispatch: {}
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-core.txt -r requirements-native.txt pyinstaller
+      - name: Install Chromium for Playwright
+        run: python -m playwright install chromium
+      - name: PyInstaller bundle
+        run: pyinstaller packaging/windows/sitemirror-win.spec --noconfirm --clean
+      - name: Smoke test (backend boots)
+        shell: pwsh
+        run: |
+          $env:SITEMIRROR_SMOKE = '1'
+          Start-Process dist/SiteMirrorStudio/SiteMirrorStudio.exe -RedirectStandardOutput smoke.log
+          $ok = $false
+          for ($i = 0; $i -lt 60; $i++) {
+            Start-Sleep 1
+            try { if ((Invoke-WebRequest http://127.0.0.1:18787/api/health -UseBasicParsing).StatusCode -eq 200) { $ok = $true; break } } catch {}
+          }
+          Stop-Process -Name SiteMirrorStudio -ErrorAction SilentlyContinue
+          if (-not $ok) { Get-Content smoke.log; exit 1 }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SiteMirrorStudio-windows-x64
+          path: dist/SiteMirrorStudio
+      # Optional: build installer.iss with Inno Setup (uncomment + iscc step):
+      # - run: choco install innosetup -y
+      # - run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\installer.iss'

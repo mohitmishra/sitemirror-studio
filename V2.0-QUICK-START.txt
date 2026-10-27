@@ -1,0 +1,23 @@
+SiteMirror Studio v2.0 — Single Verified Browser Session
+
+MAC INSTALL
+1. Close older SiteMirror copies.
+2. Run CLEAN-OLD-SITEMIRROR.command if needed.
+3. Double-click INSTALL-MAC-APP.command once.
+4. Launch ~/Applications/SiteMirror Studio.app normally.
+
+PROTECTED SITE
+- Start the crawl normally.
+- If security verification appears, SiteMirror opens ONE isolated crawler browser.
+- Complete verification ONCE in that SiteMirror browser window.
+- Do not switch to another Chrome profile/tab.
+- Once the real site loads, SiteMirror automatically minimizes that same browser.
+- The entire remaining crawl uses the exact same browser process/profile/context/cookies.
+- No extension is used.
+- SiteMirror closes the crawler browser automatically at the end.
+
+NORMAL SITE
+No browser window opens unless rendering/verification genuinely requires it.
+
+STOP
+Use the Stop button in the crawl bar. Already-downloaded project data is kept.
